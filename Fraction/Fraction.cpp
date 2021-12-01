@@ -6,7 +6,6 @@ using namespace std;
 
 class Fraction
 {
-    
     int numerator;
     int denominator;
 public:
@@ -73,6 +72,15 @@ Fraction operator*(const Fraction& value, const Fraction& value_2)
 {
     Fraction result;
     result.set_numerator(value.get_numerator()*value_2.get_numerator());
+    result.set_denominator(value.get_denominator() * value_2.get_denominator());
+    return result;
+
+}
+
+Fraction operator*(const Fraction& value, const Fraction& value_2)
+{
+    Fraction result;
+    result.set_numerator(value.get_numerator() * value_2.get_numerator());
     result.set_denominator(value.get_denominator() * value_2.get_denominator());
     return result;
 
