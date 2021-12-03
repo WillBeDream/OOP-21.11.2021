@@ -6,6 +6,12 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+class Fraction;
+Fraction operator*(Fraction left, Fraction right);
+Fraction operator/ (Fraction left, Fraction right);
+Fraction operator+(Fraction left, Fraction right);
+Fraction operator-(Fraction left, Fraction right);
+
 class Fraction
 {
     int integer;
@@ -73,37 +79,55 @@ public:
         cout << "Destructor:\t" << this << endl;
     }
 
-    void to_improper()
+    Fraction& to_improper()
     {
         numerator += integer * denominator;
         integer = 0;
+        return *this;
     }
 
-    void to_proper()
+    Fraction& to_proper()
     {
         integer += numerator / denominator;
         numerator %= denominator;
+        return *this;
     }
 
-    int NOD()
-    {
-        while (numerator > 0 && denominator > 0)
-
-            if (numerator > denominator)
-                numerator %= denominator;
-
-            else
-                denominator %= numerator;
-        //непонимаю как вернуть наименьший делитель это либо denominator либо numerator после if, потому что ретюрн может прервать цикл раньше положенного.
-    }
     Fraction& reduce()
     {
-        numerator /= NOD();
-        denominator /= NOD();
+        if (numerator==0)
+        {
+            return*this;
+        }
+        int more, less, rest;
+        if (numerator>denominator)
+        {
+            more = numerator;
+            less = denominator;
+        }
+        else
+        {
+            more = denominator;
+            less = numerator;
+        }
+        do
+        {
+            rest = more % less;
+            more = less;
+            less = rest;
+        } while (rest);
+        int GCD = more;
+        numerator /= GCD;
+        denominator /= GCD;
         return *this;
     }
     
-
+    Fraction inverted()
+    {
+        to_improper();
+        return Fraction(this->denominator, this->numerator);
+    }
+    
     void print()const
     {
         if (integer)cout << integer;
@@ -116,23 +140,157 @@ public:
         else if (integer == 0)cout << 0;
         cout << endl;
     }
+    Fraction& operator*= (const Fraction& other)
+    {
+        return *this = *this*other;
+    }
+    Fraction& operator/=(const Fraction& other)
+    {
+        return *this = *this / other;
+    }
+    Fraction& operator +=(const Fraction& other)
+    {
+        return *this = *this + other;
+    }
+    Fraction& operator -=(const Fraction& other)
+    {
+        return *this = *this - other;
+    }
 };
-
 
 Fraction operator*(Fraction left, Fraction right)
 {
     left.to_improper();
     right.to_improper();
-    Fraction result
+    return Fraction
     (
         left.get_numerator()*right.get_numerator(),
         left.get_denominator()*right.get_denominator()
-    );
+    ).to_proper().reduce();
    /* result.set_numerator(left.get_numerator() * right.get_numerator());
     result.set_denominator(left.get_denominator() * right.get_denominator());*/
-    result.to_proper();
-    return result;
+    /*result.to_proper();
+    result.reduce();*/
+    /*return result;*/
+}
 
+Fraction operator/ (Fraction left, Fraction right)
+{
+    return left * right.inverted();
+}
+
+Fraction operator+(Fraction left, Fraction right)
+{
+    int more, less, rest;
+    if (left.get_denominator()>right.get_denominator())
+    {
+        more = left.get_denominator();
+        less = right.get_denominator();
+    }
+    else 
+    {
+        more = right.get_denominator();
+        less = left.get_denominator();
+    }
+    do 
+    {
+        rest = more % less;
+        more = less;
+        less = rest;
+    } while (rest);
+    int NOK = (left.get_denominator() * right.get_denominator()) / more;
+    int del_1 = NOK / left.get_denominator();
+    int del_2 = NOK / right.get_denominator();
+    left.to_improper();
+    right.to_improper();
+    return Fraction
+    (
+        (left.get_numerator()*del_1) + (right.get_numerator()*del_2),
+        (left.get_denominator() * del_1)
+    ).to_proper().reduce();
+}
+
+Fraction operator-(Fraction left, Fraction right)
+{
+    int more, less, rest;
+    if (left.get_denominator() > right.get_denominator())
+    {
+        more = left.get_denominator();
+        less = right.get_denominator();
+    }
+    else
+    {
+        more = right.get_denominator();
+        less = left.get_denominator();
+    }
+    do
+    {
+        rest = more % less;
+        more = less;
+        less = rest;
+    } while (rest);
+    int NOK = (left.get_denominator() * right.get_denominator()) / more;
+    int del_1 = NOK / left.get_denominator();
+    int del_2 = NOK / right.get_denominator();
+    left.to_improper();
+    right.to_improper();
+    return Fraction
+    (
+        (left.get_numerator() * del_1) - (right.get_numerator() * del_2),
+        (left.get_denominator() * del_1)
+    ).to_proper().reduce();
+}
+
+
+bool operator==(Fraction left, Fraction right)
+{
+    left.to_improper();
+    right.to_improper();
+    if (left.get_numerator() * right.get_denominator() == left.get_denominator() * right.get_numerator())
+    {
+        return true;
+    }
+    else
+        return false;
+}
+
+bool operator!=(Fraction left, Fraction right)
+{
+    return !(left == right);
+}
+
+bool operator>(Fraction left, Fraction right)
+{
+    left.to_improper();
+    right.to_improper();
+    if (left.get_numerator() * right.get_denominator() > left.get_denominator() * right.get_numerator())
+    {
+        return true;
+    }
+    else
+        return false;
+}
+
+bool operator<(Fraction left, Fraction right)
+{
+    return !(left > right);
+}
+
+bool operator>=(Fraction left, Fraction right)
+{
+    left.to_improper();
+    right.to_improper();
+    if (left.get_numerator() * right.get_denominator() >= left.get_denominator() * right.get_numerator())
+    {
+        return true;
+    }
+    else
+        return false;
+}
+
+bool operator<=(Fraction left, Fraction right)
+{
+    return !(left >= right);
 }
 
 //#define CONSTRUCTORS_CHECK
@@ -153,16 +311,19 @@ int main()
     Fraction D(2, 3, 4);
     D.print();
 #endif // CONSTRUCTORS_CHECK
-    /*double a = 2.5;
+    double a = 2.5;
     double b = 3.4;
     Fraction A(2, 1, 2);
-    Fraction B(3, 2, 5);
-    Fraction C = A * B;
+    cout << "-----------------------------------------" << endl;
+    Fraction B(2, 3, 5);
+    cout << "-----------------------------------------" << endl;
+   /* Fraction C = B-A;
     C.print();*/
-    Fraction C(0, 4, 10);
-    C.reduce();
-    C.print();
-
+    B -= A;
+    B.print();
+    cout << "-----------------------------------------" << endl;
+    
+   
 
 }
 
