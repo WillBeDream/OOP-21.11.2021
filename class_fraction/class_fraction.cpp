@@ -179,38 +179,7 @@ Fraction operator/ (Fraction left, Fraction right)
     return left * right.inverted();
 }
 
-Fraction operator+(Fraction left, Fraction right)
-{
-    int more, less, rest;
-    if (left.get_denominator()>right.get_denominator())
-    {
-        more = left.get_denominator();
-        less = right.get_denominator();
-    }
-    else 
-    {
-        more = right.get_denominator();
-        less = left.get_denominator();
-    }
-    do 
-    {
-        rest = more % less;
-        more = less;
-        less = rest;
-    } while (rest);
-    int NOK = (left.get_denominator() * right.get_denominator()) / more;
-    int del_1 = NOK / left.get_denominator();
-    int del_2 = NOK / right.get_denominator();
-    left.to_improper();
-    right.to_improper();
-    return Fraction
-    (
-        (left.get_numerator()*del_1) + (right.get_numerator()*del_2),
-        (left.get_denominator() * del_1)
-    ).to_proper().reduce();
-}
-
-Fraction operator-(Fraction left, Fraction right)
+int NOD(Fraction left, Fraction right)
 {
     int more, less, rest;
     if (left.get_denominator() > right.get_denominator())
@@ -229,7 +198,26 @@ Fraction operator-(Fraction left, Fraction right)
         more = less;
         less = rest;
     } while (rest);
-    int NOK = (left.get_denominator() * right.get_denominator()) / more;
+    return more;
+}
+
+Fraction operator+(Fraction left, Fraction right)
+{
+    int NOK = (left.get_denominator() * right.get_denominator()) / NOD( left, right);
+    int del_1 = NOK / left.get_denominator();
+    int del_2 = NOK / right.get_denominator();
+    left.to_improper();
+    right.to_improper();
+    return Fraction
+    (
+        (left.get_numerator()*del_1) + (right.get_numerator()*del_2),
+        (left.get_denominator() * del_1)
+    ).to_proper().reduce();
+}
+
+Fraction operator-(Fraction left, Fraction right)
+{
+    int NOK = (left.get_denominator() * right.get_denominator()) / NOD(left, right);
     int del_1 = NOK / left.get_denominator();
     int del_2 = NOK / right.get_denominator();
     left.to_improper();
@@ -317,10 +305,10 @@ int main()
     cout << "-----------------------------------------" << endl;
     Fraction B(2, 3, 5);
     cout << "-----------------------------------------" << endl;
-   /* Fraction C = B-A;
-    C.print();*/
-    B -= A;
-    B.print();
+    Fraction C = B-A;
+    C.print();
+    /*B -= A;
+    B.print();*/
     cout << "-----------------------------------------" << endl;
     
    
