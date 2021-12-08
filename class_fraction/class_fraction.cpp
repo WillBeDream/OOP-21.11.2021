@@ -11,6 +11,13 @@ Fraction operator*(Fraction left, Fraction right);
 Fraction operator/ (Fraction left, Fraction right);
 Fraction operator+(Fraction left, Fraction right);
 Fraction operator-(Fraction left, Fraction right);
+bool operator==(Fraction left, Fraction right);
+bool operator!=(Fraction left, Fraction right);
+bool operator>(Fraction left, Fraction right);
+bool operator<(Fraction left, Fraction right);
+bool operator>=(Fraction left, Fraction right);
+bool operator<=(Fraction left, Fraction right);
+
 
 class Fraction
 {
@@ -299,17 +306,18 @@ int main()
     Fraction D(2, 3, 4);
     D.print();
 #endif // CONSTRUCTORS_CHECK
-    double a = 2.5;
-    double b = 3.4;
-    Fraction A(2, 1, 2);
-    cout << "-----------------------------------------" << endl;
-    Fraction B(2, 3, 5);
-    cout << "-----------------------------------------" << endl;
-    Fraction C = B-A;
-    C.print();
-    /*B -= A;
-    B.print();*/
-    cout << "-----------------------------------------" << endl;
+    //double a = 2.5;
+    //double b = 3.4;
+    //Fraction A(2, 1, 2);
+    //cout << "-----------------------------------------" << endl;
+    //Fraction B(2, 3, 5);
+    //cout << "-----------------------------------------" << endl;
+    //Fraction C = B + A;
+    //C.print();
+    ///*B -= A;
+    //B.print();*/
+    //cout << "-----------------------------------------" << endl;
+    
     
    
 
