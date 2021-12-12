@@ -60,12 +60,21 @@ public:
         this->denominator = 1;
         cout << "Default cinstructor:\t" << this << endl;
     }
-    Fraction(int integer)
+    explicit Fraction(int integer)
     {
         this->integer = integer;
         this->numerator = 0;
         this->denominator = 1;
-        cout << "1argConstructor" << this << endl;
+        cout << "1argConstructor:\t" << this << endl;
+    }
+    Fraction(double decimal)
+    {
+        decimal += 1e-11;
+        integer = decimal;
+        denominator = 1e+9;
+        decimal -= integer;
+        numerator = decimal * denominator;
+        reduce();
     }
     Fraction(int numerator, int denominator)
     {
@@ -147,6 +156,15 @@ public:
         else if (integer == 0)cout << 0;
         cout << endl;
     }
+
+    Fraction& operator=(const Fraction& other)
+    {
+        this->integer = other.integer;
+        this->numerator = other.numerator;
+        this->denominator = other.denominator;
+        cout << "CopyAssigment:\t" << this << endl;
+        return *this;
+    }
     Fraction& operator*= (const Fraction& other)
     {
         return *this = *this*other;
@@ -162,6 +180,14 @@ public:
     Fraction& operator -=(const Fraction& other)
     {
         return *this = *this - other;
+    }
+    explicit operator int()const
+    {
+        return integer;
+    }
+    operator double()const
+    {
+        return integer + (double)numerator / denominator;
     }
 };
 
@@ -289,6 +315,9 @@ bool operator<=(Fraction left, Fraction right)
 }
 
 //#define CONSTRUCTORS_CHECK
+//#define OPERATORS_CHECK
+//#define TYPE_CONVERSION_BASIC
+//#define CONVERSIONS_FROM_OTHER_TO_CLASS
 
 int main()
 {
@@ -306,21 +335,53 @@ int main()
     Fraction D(2, 3, 4);
     D.print();
 #endif // CONSTRUCTORS_CHECK
-    //double a = 2.5;
-    //double b = 3.4;
-    //Fraction A(2, 1, 2);
-    //cout << "-----------------------------------------" << endl;
-    //Fraction B(2, 3, 5);
-    //cout << "-----------------------------------------" << endl;
-    //Fraction C = B + A;
-    //C.print();
-    ///*B -= A;
-    //B.print();*/
-    //cout << "-----------------------------------------" << endl;
-    
-    
-   
+#ifdef OPERATORS_CHECK
+    double a = 2.5;
+    double b = 3.4;
+    Fraction A(2, 1, 2);
+    cout << "-----------------------------------------" << endl;
+    Fraction B(2, 3, 5);
+    cout << "-----------------------------------------" << endl;
+    Fraction C = B + A;
+    C.print();
+    /*B -= A;
+    B.print();*/
+    cout << "-----------------------------------------" << endl;
+#endif // OPERATORS_CHECK
+#ifdef TYPE_CONVERSION_BASIC
+    int a = 2;
+    double b = 3;
+    int c = b;
+    int d = 4.5;
+#endif // TYPE_CONVERSION_BASIC
+#ifdef CONVERSIONS_FROM_OTHER_TO_CLASS
+    double a = 2;
+    Fraction A = (Fraction)5;
+    A.print();
 
+    Fraction B;
+    cout << "-----------------------------------------" << endl;
+    B = Fraction(8);
+    cout << "-----------------------------------------" << endl;
+    B.print();
+
+    Fraction C(12);
+    Fraction D{ 13 };
+#endif // CONVERSIONS_FROM_OTHER_TO_CLASS
+
+    /*Fraction A(2);
+    int a (A);
+    cout << a << endl;
+    int i = (int)A;*/
+
+    Fraction A(2, 3, 4);
+    double a = A;
+    cout << a << endl;
+    
+    double b = 2.75;
+    Fraction B = b;
+    B.print();
+   
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
