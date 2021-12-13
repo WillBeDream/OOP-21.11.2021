@@ -144,17 +144,18 @@ public:
         return Fraction(this->denominator, this->numerator);
     }
     
-    void print()const
+    std::ostream& print(std::ostream& os = cout)const
     {
-        if (integer)cout << integer;
+        if (integer)os << integer;
         if (numerator)
         {
-            if (integer)cout << "(";
-            cout << numerator << "/" << denominator;
-            if (integer)cout << ")";
+            if (integer)os << "(";
+            os << numerator << "/" << denominator;
+            if (integer)os << ")";
         }
-        else if (integer == 0)cout << 0;
-        cout << endl;
+        else if (integer == 0)os << 0;
+        os << endl;
+        return os;
     }
 
     Fraction& operator=(const Fraction& other)
@@ -185,10 +186,12 @@ public:
     {
         return integer;
     }
-    operator double()const
+    explicit operator double()const
     {
         return integer + (double)numerator / denominator;
     }
+
+    friend std::istream& operator>>(std::istream& os, Fraction& obj);
 };
 
 Fraction operator*(Fraction left, Fraction right)
@@ -314,6 +317,31 @@ bool operator<=(Fraction left, Fraction right)
     return !(left >= right);
 }
 
+std::ostream& operator<<(std::ostream& os, const Fraction& obj)
+{
+    /*if (obj.get_integer())os << obj.get_integer();
+    if (obj.get_numerator())
+    {
+        if (obj.get_integer())os << "(";
+        os << obj.get_numerator() << "/" << obj.get_denominator();
+        if (obj.get_integer())os << ")";
+    }
+    else if (obj.get_integer() == 0)os << 0;
+    os << endl;
+    return os;*/
+    return obj.print(os);
+
+}
+
+std::istream& operator>>(std::istream& os, Fraction& obj)
+{
+    os >> obj.integer;
+    os >> obj.numerator;
+    os >> obj.denominator;
+    return os;
+}
+
+
 //#define CONSTRUCTORS_CHECK
 //#define OPERATORS_CHECK
 //#define TYPE_CONVERSION_BASIC
@@ -321,8 +349,9 @@ bool operator<=(Fraction left, Fraction right)
 
 int main()
 {
-#ifdef CONSTRUCTORS_CHECK
     setlocale(LC_ALL, "");
+#ifdef CONSTRUCTORS_CHECK
+    
     Fraction A;
     A.print();
     cout << "-----------------------------------------" << endl;
@@ -374,14 +403,19 @@ int main()
     cout << a << endl;
     int i = (int)A;*/
 
-    Fraction A(2, 3, 4);
+    /*Fraction A(2, 3, 4);
     double a = A;
     cout << a << endl;
     
     double b = 2.75;
     Fraction B = b;
-    B.print();
+    B.print();*/
    
+    Fraction A;
+    cout<< "введите простую дробь" << endl;
+    cin >> A;
+    cout << A << endl;
+    
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
