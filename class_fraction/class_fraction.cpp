@@ -58,7 +58,7 @@ public:
         this->integer = 0;
         this->numerator = 0;
         this->denominator = 1;
-        cout << "Default cinstructor:\t" << this << endl;
+        cout << "Default constructor:\t" << this << endl;
     }
     explicit Fraction(int integer)
     {
@@ -191,7 +191,7 @@ public:
         return integer + (double)numerator / denominator;
     }
 
-    friend std::istream& operator>>(std::istream& os, Fraction& obj);
+    /*friend std::istream& operator>>(std::istream& os, Fraction& obj);*/
 };
 
 Fraction operator*(Fraction left, Fraction right)
@@ -333,13 +333,59 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 
 }
 
-std::istream& operator>>(std::istream& os, Fraction& obj)
+std::istream& operator>>(std::istream& is, Fraction& obj)
 {
-    os >> obj.integer;
-    os >> obj.numerator;
-    os >> obj.denominator;
-    return os;
+   /* int integer;
+    int numerator;
+    int denominator;
+    is >> integer >> numerator >> denominator;
+    obj.set_integer(integer);
+    obj.set_numerator(numerator);
+    obj.set_denominator(denominator);*/
+
+    obj = Fraction();
+
+    const int SIZE = 256;
+    char buffer[SIZE] = {};
+    char delimiters[] = "() /";
+    is.getline(buffer, SIZE);
+    char* number[3] = {};
+    int n = 0;
+    
+    for (char*pch  = strtok(buffer, delimiters); pch; pch=strtok(NULL, delimiters))
+    {
+        number[n++] = pch;
+    }
+
+   /* for (size_t i = 0; i < n; i++)
+   {
+        cout << number[i] << "\t";
+   }
+   cout << endl;*/
+
+    switch (n)
+    {
+    case 1: obj.set_integer(atoi(number[0])); break;
+    case 2:
+        obj.set_numerator(atoi(number[0]));
+        obj.set_denominator(atoi(number[1]));
+        break;
+    case 3: 
+        obj.set_integer(atoi(number[0]));
+        obj.set_numerator(atoi(number[1]));
+        obj.set_denominator(atoi(number[2]));
+    }
+
+    return is;
 }
+
+//std::istream& operator>>(std::istream& os, Fraction& obj)
+//{
+//    os >> obj.integer;
+//    os >> obj.numerator;
+//    os >> obj.denominator;
+//    return os;
+//}
 
 
 //#define CONSTRUCTORS_CHECK
@@ -411,11 +457,14 @@ int main()
     Fraction B = b;
     B.print();*/
    
-    Fraction A;
+   /* Fraction A;
     cout<< "введите простую дробь" << endl;
     cin >> A;
-    cout << A << endl;
+    cout << A << endl;*/
     
+    Fraction A;
+    cin >> A;
+    cout << A << endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
