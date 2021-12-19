@@ -6,6 +6,12 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+#define delimiter "\n-------------------------------------------\n"
+
+
+class String;
+String operator+(const String& str1, const String& str2);
+
 class String
 {
     int size;
@@ -65,7 +71,9 @@ public:
         {
             this->str[i] = str[i];
         }
+        return *this;
     }
+
     void print()const
     {
         cout << size << endl;
@@ -95,7 +103,10 @@ public:
         cout << "CopyAssigment" << this << endl;
         return *this;
     }
-
+    String& operator+=(const String& other)
+    {
+        return *this = *this + other;
+    }
 };
 
 String operator+(const String& str1, const String& str2)
@@ -112,10 +123,10 @@ String operator+(const String& str1, const String& str2)
     return result;
 }
 
-String& operator+=(String& str1, const String& str2)
-{
-    return str1 = str1 + str2;
-}
+//String& operator+=(String& str1, const String& str2)
+//{
+//    return str1 = str1 + str2;
+//}
 
 std::ostream& operator<<(std::ostream& os, const String& obj)
 {
@@ -124,12 +135,25 @@ std::ostream& operator<<(std::ostream& os, const String& obj)
 
 std::istream& operator>>(std::istream& os, String& obj)
 {
-    os >> obj.get_str();
+    /*os >> obj.get_str();*/
+    const int SIZE = 1024*1000;
+    char buffer[SIZE] = {};
+    os >> buffer;
+    obj = buffer;
     return os;
 }
 
+std::istream& getline(std::istream& os, String& obj)
+{
+    const int SIZE = 1024 * 1000;
+    char buffer[SIZE] = {};
+    os.getline(buffer, SIZE);
+    obj = buffer;
+    return os;
+}
 
 //#define CONSTRUCTORS_CHECK
+//#define OPERATORS_CHECH
 
 int main()
 {
@@ -146,14 +170,23 @@ int main()
     str2 = str2;
     cout << str2 << endl;
 #endif // CONSTRUCTORS_CHECK
+#ifdef OPERATORS_CHECK
     /*String str1 = "Hello";
-    String str2 = "World";
-    str1 += str2;
-    str1.print();*/
+String str2 = "World";
+cout << delimiter;
+str1 += str2;
+cout << delimiter;
+str1.print();
+cout << delimiter;*/
+
+//String str;
+//cout << "enter words" << endl; 
+//cin >> str;
+//cout << str << endl;  
+#endif // OPERATORS_CHECK
 
     String str;
-    cout << "enter words" << endl; 
-    cin >> str;
+    getline(cin, str);
     cout << str << endl;
 
 }
