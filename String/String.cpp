@@ -31,17 +31,17 @@ public:
     }
     
 
-    explicit String(int size=80)
+    explicit String(int size=80):size(size), str(new char[size]{})
     {
-        this->size = size;
-        this->str = new char[size] {};
+       /* this->size = size;
+        this->str = new char[size] {};*/
         cout <<  "Constructor:\t" << this << endl;
     }
     
-    String(const char* str)
+    String(const char* str):size(strlen(str)+1),str(new char[size]{})
     {
-        this->size=strlen(str)+1;
-        this->str = new char[size] {};
+        /*this->size=strlen(str)+1;
+        this->str = new char[size] {};*/
         for (size_t i = 0; i < size; i++)
         {
             this->str[i] = str[i];
@@ -49,10 +49,10 @@ public:
         cout << "1argConstructor:\t" << this << endl;
     }
 
-    String(const String& other)
+    String(const String& other):size(other.size), str(new char[size]{})
     {
-        this->size = other.size;
-        this->str = new char[size] {};
+        /*this->size = other.size;
+        this->str = new char[size] {};*/
         for (size_t i = 0; i < size; i++)
         {
             this->str[i] = other.str[i];
@@ -154,6 +154,7 @@ std::istream& getline(std::istream& os, String& obj)
 
 //#define CONSTRUCTORS_CHECK
 //#define OPERATORS_CHECH
+//#define INPUT_CHECK
 
 int main()
 {
@@ -184,10 +185,22 @@ cout << delimiter;*/
 //cin >> str;
 //cout << str << endl;  
 #endif // OPERATORS_CHECK
-
+#ifdef INPUT_CHECK
     String str;
     getline(cin, str);
     cout << str << endl;
+#endif // INPUT_CHECK
+    String str1;
+    str1.print();
+    String str2 = "Hello";
+    str2.print();
+    String str3 = str2;
+    str3.print();
+    /*String str4();*/
+    /*str4.print();*/
+    String str5{};
+    String str6("World");
+    String str{ "planet" };
 
 }
 
