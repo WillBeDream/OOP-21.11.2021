@@ -31,17 +31,17 @@ public:
     }
     
 
-    explicit String(int size=80)
+    explicit String(int size=80):size(size), str(new char[size]{})
     {
-        this->size = size;
-        this->str = new char[size] {};
+        /*this->size = size;
+        this->str = new char[size] {};*/
         cout <<  "Constructor:\t" << this << endl;
     }
     
-    String(const char* str)
+    String(const char* str):String(strlen(str)+1)
     {
-        this->size=strlen(str)+1;
-        this->str = new char[size] {};
+        /*this->size=strlen(str)+1;
+        this->str = new char[size] {};*/
         for (size_t i = 0; i < size; i++)
         {
             this->str[i] = str[i];
@@ -49,14 +49,14 @@ public:
         cout << "1argConstructor:\t" << this << endl;
     }
 
-    String(const String& other)
+    String(const String& other):String(other.str)
     {
-        this->size = other.size;
-        this->str = new char[size] {};
-        for (size_t i = 0; i < size; i++)
-        {
-            this->str[i] = other.str[i];
-        }
+        ///*this->size = other.size;
+        //this->str = new char[size] {};*/
+        //for (size_t i = 0; i < size; i++)
+        //{
+        //    this->str[i] = other.str[i];
+        //}
         cout << "CopyConstructor" << this << endl;
     }
 
@@ -153,7 +153,8 @@ std::istream& getline(std::istream& os, String& obj)
 }
 
 //#define CONSTRUCTORS_CHECK
-//#define OPERATORS_CHECH
+#define OPERATORS_CHECK
+//#define INPUT_CHECK
 
 int main()
 {
@@ -171,23 +172,25 @@ int main()
     cout << str2 << endl;
 #endif // CONSTRUCTORS_CHECK
 #ifdef OPERATORS_CHECK
-    /*String str1 = "Hello";
+String str1 = "Hello";
 String str2 = "World";
 cout << delimiter;
 str1 += str2;
 cout << delimiter;
 str1.print();
-cout << delimiter;*/
-
-//String str;
-//cout << "enter words" << endl; 
-//cin >> str;
-//cout << str << endl;  
+cout << delimiter;
+String str;
+cout << "enter words" << endl; 
+cin >> str;
+cout << str << endl;  
 #endif // OPERATORS_CHECK
 
+#ifdef INPUT_CHECK
     String str;
     getline(cin, str);
     cout << str << endl;
+#endif // INPUT_CHECK
+
 
 }
 
