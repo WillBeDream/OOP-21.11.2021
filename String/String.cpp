@@ -17,97 +17,109 @@ class String
     int size;
     char* str;
 public:
-    char* get_str()
-    {
-        return str;
-    }
-    int get_size()const
-    {
-        return size;
-    }
-    const char* get_str()const
-    {
-        return str;
-    }
+    char* get_str();
+    int get_size()const;
+    const char* get_str()const;
     
-
-    explicit String(int size=80):size(size), str(new char[size]{})
-    {
-        /*this->size = size;
-        this->str = new char[size] {};*/
-        cout <<  "Constructor:\t" << this << endl;
-    }
+    explicit String(int size = 80);
     
-    String(const char* str):String(strlen(str)+1)
-    {
-        /*this->size=strlen(str)+1;
-        this->str = new char[size] {};*/
-        for (size_t i = 0; i < size; i++)
-        {
-            this->str[i] = str[i];
-        }
-        cout << "1argConstructor:\t" << this << endl;
-    }
+    String(const char* str);
 
-    String(const String& other):String(other.str)
-    {
-        ///*this->size = other.size;
-        //this->str = new char[size] {};*/
-        //for (size_t i = 0; i < size; i++)
-        //{
-        //    this->str[i] = other.str[i];
-        //}
-        cout << "CopyConstructor" << this << endl;
-    }
+    String(const String& other);
 
-    ~String()
-    {
-        delete[]str;
-        cout << "Destructor:\t" << this << endl;
-    }
-    String operator=(char* str)
-    {
-        for (size_t i = 0; str[i]!='\0'; i++)
-        {
-            this->str[i] = str[i];
-        }
-        return *this;
-    }
+    ~String();
 
-    void print()const
-    {
-        cout << size << endl;
-        cout << str << endl;
-    }
+    void print()const;
 
-    char& operator[](int i)
-    {
-        return str[i];
-    }
+    char& operator[](int i);
 
-    const char& operator[](int i)const
-    {
-        return str[i];
-    }
+    const char& operator[](int i)const;
 
-    String& operator=(const String& other)
-    {
-        if (this == &other)return *this;
-        delete[] this->str;
-        this->size = other.size;
-        this->str = new char[size] {};
-        for (size_t i = 0; i < size; i++)
-        {
-            this->str[i] = other.str[i];
-        }
-        cout << "CopyAssigment" << this << endl;
-        return *this;
-    }
-    String& operator+=(const String& other)
-    {
-        return *this = *this + other;
-    }
+    String& operator=(const String& other);
+    String& operator+=(const String& other);
 };
+
+char* String::get_str()
+{
+    return str;
+}
+int String::get_size()const
+{
+    return size;
+}
+const char* String::get_str()const
+{
+    return str;
+}
+
+String::String(int size) :size(size), str(new char[size] {})
+{
+    /*this->size = size;
+    this->str = new char[size] {};*/
+    cout << "Constructor:\t" << this << endl;
+}
+
+String::String(const char* str) :String(strlen(str) + 1)
+{
+    /*this->size=strlen(str)+1;
+    this->str = new char[size] {};*/
+    for (size_t i = 0; i < size; i++)
+    {
+        this->str[i] = str[i];
+    }
+    cout << "1argConstructor:\t" << this << endl;
+}
+
+String::String(const String& other) :String(other.str)
+{
+    ///*this->size = other.size;
+    //this->str = new char[size] {};*/
+    //for (size_t i = 0; i < size; i++)
+    //{
+    //    this->str[i] = other.str[i];
+    //}
+    cout << "CopyConstructor" << this << endl;
+}
+
+String::~String()
+{
+    delete[]str;
+    cout << "Destructor:\t" << this << endl;
+}
+
+void String::print()const
+{
+    cout << size << endl;
+    cout << str << endl;
+}
+
+char& String::operator[](int i)
+{
+    return str[i];
+}
+
+const char& String::operator[](int i)const
+{
+    return str[i];
+}
+
+String& String::operator=(const String& other)
+{
+    if (this == &other)return *this;
+    delete[] this->str;
+    this->size = other.size;
+    this->str = new char[size] {};
+    for (size_t i = 0; i < size; i++)
+    {
+        this->str[i] = other.str[i];
+    }
+    cout << "CopyAssigment" << this << endl;
+    return *this;
+}
+String& String::operator+=(const String& other)
+{
+    return *this = *this + other;
+}
 
 String operator+(const String& str1, const String& str2)
 {
